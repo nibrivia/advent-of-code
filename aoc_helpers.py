@@ -3,4 +3,4 @@ def get_input(day):
 
     filename = "inputs/day-%s" % day
     with open(filename) as input_file:
-        return input_file.read()
+        return input_file.readlines()
