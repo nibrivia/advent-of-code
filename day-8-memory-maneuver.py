@@ -55,3 +55,40 @@ graph = extract_first_child(graph_desc)
 
 s = sum_data(graph)
 print(s)
+
+
+# Part two
+
+def compute_values(graph):
+    working = True
+    values = dict()
+    while not 0 in values:
+        for uid, node in graph.items():
+            if uid in values:
+                continue
+
+            children = node["children"]
+            data     = node["data"]
+
+            if len(children) == 0:
+                values[uid] = sum(data)
+            else:
+                ready = True
+                value_uids = []
+                for child_num in data:
+                    # Doesn't point to a real child
+                    if child_num == 0 or child_num > len(children):
+                        continue
+
+                    # It does, check if we have the value, else skip
+                    child_uid = children[child_num-1]
+                    value_uids.append(child_uid)
+                    if not child_uid in values:
+                        ready = False
+                if ready:
+                    values[uid] = sum(values[child_uid] for child_uid in value_uids)
+
+    return values[0]
+
+value = compute_values(graph)
+print(value)
