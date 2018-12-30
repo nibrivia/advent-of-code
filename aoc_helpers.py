@@ -4,3 +4,10 @@ def get_input(day):
     filename = "inputs/day-%s" % day
     with open(filename) as input_file:
         return input_file.readlines()
+
+
+def dict_key(entry):
+    """Allows to returns a sorted dictionnary"""
+    key, value = entry
+    return value
+

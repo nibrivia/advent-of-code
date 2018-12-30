@@ -37,10 +37,6 @@ def records_parse(records_str):
 
     return sleep_log
 
-def dict_key(entry):
-    key, value = entry
-    return value
-
 records = records_parse(records_str)
 
 sleep_totals = dict()
