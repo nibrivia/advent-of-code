@@ -16,3 +16,23 @@ for scan in scans:
 #print(counts)
 print(counts[2] * counts[3])
 
+
+# Part two
+## differ in at most one place
+import re
+
+def part_two():
+    for scan in scans:
+        for i in range(len(scan)):
+            # Builds a regex accepting an arbitrary character in the middle
+            before, after = scan[:i], scan[i+1:]
+            regex_str = before + '.' + after
+            regex = re.compile(regex_str)
+
+            # filter returns an iterator, and we're gonna match ourselves
+            for match in filter(regex.match, scans):
+                if match != scan:
+                    print(before + after)
+                    return
+
+part_two()
