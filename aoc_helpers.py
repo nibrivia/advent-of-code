@@ -3,7 +3,7 @@ def get_input(day):
 
     filename = "inputs/day-%s" % day
     with open(filename) as input_file:
-        return input_file.readlines()
+        return [line.rstrip() for line in input_file.readlines()]
 
 
 def dict_key(entry):
