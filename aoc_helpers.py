@@ -11,3 +11,6 @@ def dict_key(entry):
     key, value = entry
     return value
 
+def sort_dict(d):
+    """Returns a list of (key, elemen"""
+    return sorted(d.items(), key = dict_key)
