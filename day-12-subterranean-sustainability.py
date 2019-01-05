@@ -58,15 +58,13 @@ def evolve_pots(pots, rules):
     return evolved
 
 def evolve_n(pots, rules, generations = 20):
-    print(" 0: %s" % (pots_str(pots)))
+    #print(" 0: %s" % (pots_str(pots)))
     for gen in range(generations):
         pots = evolve_pots(pots, rules)
-        print("{:>2}: {}".format(gen+1, pots_str(pots)))
+        #print("{:>2}: {}".format(gen+1, pots_str(pots)))
     return pots
 
-print(pots_str(pots))
 pots = evolve_n(pots, rules, generations = 20)
-print(pots_str(pots))
 
 pot_sum = 0
 for pos, content in pots.items():
@@ -75,4 +73,3 @@ for pos, content in pots.items():
 
 
 print(pot_sum)
-print()
