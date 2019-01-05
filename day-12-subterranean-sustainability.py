@@ -23,6 +23,15 @@ rules_str = input_str[2:]
 #            ####. => #""".splitlines()
 rules = dict([rule.split(" => ") for rule in rules_str])
 
+def pots_to_n(context):
+    num = 0
+    for p in context:
+        num *= 2
+        if p == "#":
+            num += 1
+    return num
+
+rules = frozenset(pots_to_n(llcrr) for llcrr, n in rules.items() if n == "#")
 
 def pots_str(pots):
     pots = {i: v for i, v in pots.items() if v != "."}
@@ -36,40 +45,52 @@ def pots_str(pots):
 
     return "{} ({}, {})".format(pot_str, min_x, max_x)#+ "\n" + bot_str
 
-from collections import deque
 
-def evolve_pots(pots, rules):
-    llcrr = deque('.....', maxlen = 5)
-    evolved = dict()
+def evolve(pots, rules, generations = 20):
+    pots = {i: v for i, v in pots.items() if v != "."}
+    pots = set(pots.keys())
+    psum = 0
+    diff = 0
+    pred = 0
 
-    # We iterate over indices to make sure we don't miss entries
-    indices = pots.keys()
-    min_x, max_x = min(indices), max(indices)
-
-    for index in range(min_x-5, max_x+5):
-        llcrr.append(pots.get(index+2, ".")) # maxlen is 5, will pop too
-        context = ''.join(llcrr)
-        evolution = rules.get(context, ".")
-        #print(" @{}, {} -> {}".format(index, context, evolution))
-        if evolution == "#":
-            evolved[index] = "#"
-
-
-    return evolved
-
-def evolve_n(pots, rules, generations = 20):
-    #print(" 0: %s" % (pots_str(pots)))
     for gen in range(generations):
-        pots = evolve_pots(pots, rules)
-        #print("{:>2}: {}".format(gen+1, pots_str(pots)))
-    return pots
+        context = 0
+        evolved = set()
 
-pots = evolve_n(pots, rules, generations = 20)
+        min_x, max_x = min(pots), max(pots)
 
-pot_sum = 0
-for pos, content in pots.items():
-    if content == "#":
-        pot_sum +=pos
+        for index in range(min_x-2, max_x+3):
+            context = (context*2) % 32
+            if index+2 in pots:
+                context += 1
+
+            if context in rules:
+                evolved.add(index)
+        pots = evolved
+        if gen > 100:
+            ppsum = psum
+            psum  = sum(pots)
+            diff  = psum-ppsum
+
+            pred_prev = pred 
+            pred = (generations-gen-1)*diff+sum(pots)
+
+            if diff == 58: # visually
+                #print(sum(pots) - psum)
+                print(" -{} {}".format(pred, diff))
+                return pred
+                #pass
 
 
-print(pot_sum)
+    return sum(pots)
+
+def part1(pots, rules):
+    print(evolve(pots, rules, generations = 20))
+
+def part2(pots, rules):
+    generations = 50000000000
+    #generations = int(5e4) # 2901856
+    print(evolve(pots, rules, generations = generations))
+
+part1(pots, rules) # 2823
+part2(pots, rules)
